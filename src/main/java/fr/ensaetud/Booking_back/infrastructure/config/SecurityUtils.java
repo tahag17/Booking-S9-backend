@@ -66,21 +66,40 @@ public class SecurityUtils {
     }
 
     public static List<SimpleGrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
+
+        System.out.println("===== DEBUG: OAUTH2 CLAIMS =====");
+        claims.forEach((key, value) -> {
+            System.out.println(
+                    "CLAIM: " + key +
+                            " = " + value +
+                            " (" + (value != null ? value.getClass().getName() : "null") + ")"
+            );
+        });
+        System.out.println("===== END CLAIMS =====");
         return mapRolesToGrantedAuthorities(getRolesFromClaims(claims));
 
     }
 
     private static Collection<String> getRolesFromClaims(Map<String, Object> claims) {
+        Object roles = claims.get(CLAIMS_NAMESPACE);
+        System.out.println("DEBUG: roles claim [" + CLAIMS_NAMESPACE + "] = " + roles);
         return (List<String>) claims.get(CLAIMS_NAMESPACE);
     }
 
 
     private static List<SimpleGrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
-        return roles
-                .stream()
-                .filter(role -> role.startsWith("ROLE_")).
-                map(SimpleGrantedAuthority::new).toList();
+
+        if (roles == null) {
+            System.out.println("WARN: roles is null → returning empty authorities");
+            return List.of();
+        }
+
+        return roles.stream()
+                .filter(role -> role.startsWith("ROLE_"))
+                .map(SimpleGrantedAuthority::new)
+                .toList();
     }
+
 
     public static boolean hasCurrentUserAnyOfAuthorities(String... authorities) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

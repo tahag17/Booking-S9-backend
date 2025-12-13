@@ -25,7 +25,7 @@ public class AuthController {
 
     public AuthController(UserService userService, ClientRegistrationRepository registration) {
         this.userService = userService;
-        this.registration = registration.findByRegistrationId("okta");
+        this.registration = registration.findByRegistrationId("auth0");
     }
 
 
