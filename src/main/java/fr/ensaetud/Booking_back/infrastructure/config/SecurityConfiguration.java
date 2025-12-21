@@ -1,5 +1,6 @@
 package fr.ensaetud.Booking_back.infrastructure.config;
 
+import fr.ensaetud.Booking_back.user.controller.OAuth2SuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -19,6 +20,13 @@ import java.util.Set;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
+
+    private final OAuth2SuccessHandler successHandler;
+
+    public SecurityConfiguration(OAuth2SuccessHandler successHandler) {
+        this.successHandler = successHandler;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
@@ -26,8 +34,9 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
                 .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(requestHandler))
-                .oauth2Login(Customizer.withDefaults())
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(successHandler)
+                )                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .oauth2Client(Customizer.withDefaults());
 
         return http.build();
