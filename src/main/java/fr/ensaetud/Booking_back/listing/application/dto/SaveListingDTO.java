@@ -1,5 +1,6 @@
 package fr.ensaetud.Booking_back.listing.application.dto;
 
+import fr.ensaetud.Booking_back.listing.application.dto.sub.DescriptionDTO;
 import fr.ensaetud.Booking_back.listing.application.dto.sub.ListingInfoDTO;
 import fr.ensaetud.Booking_back.listing.application.dto.sub.PictureDTO;
 import fr.ensaetud.Booking_back.listing.application.dto.vo.PriceVO;
@@ -15,11 +16,13 @@ public class SaveListingDTO {
     @NotNull
     String location;
     @NotNull @Valid
-    ListingInfoDTO infos;
+    ListingInfoDTO info;
     @NotNull @Valid
     PriceVO price;
     @NotNull
     List<PictureDTO> pictures;
+    @NotNull @Valid
+    DescriptionDTO description;
 
     public BookingCategory getCategory() {
         return category;
@@ -37,12 +40,12 @@ public class SaveListingDTO {
         this.location = location;
     }
 
-    public ListingInfoDTO getInfos() {
-        return infos;
+    public ListingInfoDTO getInfo() {
+        return info;
     }
 
-    public void setInfos(ListingInfoDTO infos) {
-        this.infos = infos;
+    public void setInfo(ListingInfoDTO info) {
+        this.info = info;
     }
 
     public PriceVO getPrice() {
@@ -59,5 +62,13 @@ public class SaveListingDTO {
 
     public void setPictures(List<PictureDTO> pictures) {
         this.pictures = pictures;
+    }
+
+    public DescriptionDTO getDescription() {
+        return description;
+    }
+
+    public void setDescription(DescriptionDTO description) {
+        this.description = description;
     }
 }
