@@ -12,6 +12,10 @@ import fr.ensaetud.Booking_back.user.domain.application.UserService;
 import fr.ensaetud.Booking_back.user.domain.application.dto.ReadUserDTO;
 import org.apache.commons.collections4.Put;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class LandlordService {
@@ -39,5 +43,6 @@ public class LandlordService {
         return listingMapper.listingToCreatedListingDTO(savedListing);
 
     }
+
 }
 

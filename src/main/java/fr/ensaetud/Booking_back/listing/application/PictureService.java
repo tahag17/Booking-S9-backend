@@ -29,7 +29,7 @@ public class PictureService {
 
        }
        listingPictureRepository.saveAll(listingPictures);
-       return listingPictureMapper.listingPicturesToPictureDTOs(listingPictures);
+       return listingPictureMapper.listingPictureToPictureDTO(listingPictures.stream().toList());
 
     }
 
