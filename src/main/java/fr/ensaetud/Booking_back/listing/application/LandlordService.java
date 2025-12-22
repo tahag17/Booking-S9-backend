@@ -3,10 +3,12 @@ package fr.ensaetud.Booking_back.listing.application;
 
 import com.auth0.exception.Auth0Exception;
 import fr.ensaetud.Booking_back.listing.application.dto.CreatedListingDTO;
+import fr.ensaetud.Booking_back.listing.application.dto.DisplayCardListingDTO;
 import fr.ensaetud.Booking_back.listing.application.dto.SaveListingDTO;
 import fr.ensaetud.Booking_back.listing.domain.Listing;
 import fr.ensaetud.Booking_back.listing.mapper.ListingMapper;
 import fr.ensaetud.Booking_back.listing.repository.ListingRepository;
+import fr.ensaetud.Booking_back.sharedkernel.service.State;
 import fr.ensaetud.Booking_back.user.domain.application.Auth0Service;
 import fr.ensaetud.Booking_back.user.domain.application.UserService;
 import fr.ensaetud.Booking_back.user.domain.application.dto.ReadUserDTO;
@@ -42,6 +44,21 @@ public class LandlordService {
         auth0Service.addLandlordRoleToUser(userConnected);
         return listingMapper.listingToCreatedListingDTO(savedListing);
 
+    }
+    @Transactional(readOnly = true)
+    public List<DisplayCardListingDTO> getAllProperties(ReadUserDTO landlord) {
+        List<Listing> properties = listingRepository.findAllByLandlordPublicIdFetchCoverPicture(landlord.publicId());
+        return listingMapper.listingToDisplayCardListingDTOs(properties);
+    }
+
+    @Transactional
+    public State<UUID, String> delete(UUID publicId, ReadUserDTO landlord) {
+        long deletedSuccessfully = listingRepository.deleteByPublicIdAndLandlordPublicId(publicId, landlord.publicId());
+        if (deletedSuccessfully > 0) {
+            return State.<UUID, String>builder().forSuccess(publicId);
+        } else {
+            return State.<UUID, String>builder().forUnauthorized("User not authorized to delete this listing");
+        }
     }
 
 }

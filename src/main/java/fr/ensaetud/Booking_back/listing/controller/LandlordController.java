@@ -3,11 +3,16 @@ package fr.ensaetud.Booking_back.listing.controller;
 import com.auth0.exception.Auth0Exception;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.ensaetud.Booking_back.infrastructure.config.SecurityUtils;
 import fr.ensaetud.Booking_back.listing.application.LandlordService;
 import fr.ensaetud.Booking_back.listing.application.dto.CreatedListingDTO;
+import fr.ensaetud.Booking_back.listing.application.dto.DisplayCardListingDTO;
 import fr.ensaetud.Booking_back.listing.application.dto.SaveListingDTO;
 import fr.ensaetud.Booking_back.listing.application.dto.sub.PictureDTO;
+import fr.ensaetud.Booking_back.sharedkernel.service.State;
+import fr.ensaetud.Booking_back.sharedkernel.service.StatusNotification;
 import fr.ensaetud.Booking_back.user.domain.application.UserService;
+import fr.ensaetud.Booking_back.user.domain.application.dto.ReadUserDTO;
 import jakarta.validation.ConstraintViolation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,15 +20,14 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import jakarta.validation.Validator;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -75,6 +79,27 @@ public class LandlordController {
                 throw new RuntimeException(String.format("cannot parse file %s",multipartFile.getOriginalFilename()));
             }
         };
+    }
+
+    @GetMapping(value = "/get-all")
+    @PreAuthorize("hasAnyRole('" + SecurityUtils.ROLE_LANDLORD + "')")
+    public ResponseEntity<List<DisplayCardListingDTO>> getAll() {
+        ReadUserDTO connectedUser = userService.getAuthenticatedUserFromSecurityContext();
+        List<DisplayCardListingDTO> allProperties = landlordService.getAllProperties(connectedUser);
+        return ResponseEntity.ok(allProperties);
+    }
+
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasAnyRole('" + SecurityUtils.ROLE_LANDLORD + "')")
+    public ResponseEntity<UUID> delete(@RequestParam UUID publicId) {
+        ReadUserDTO connectedUser = userService.getAuthenticatedUserFromSecurityContext();
+        State<UUID, String> deleteState = landlordService.delete(publicId, connectedUser);
+        if (deleteState.getStatus().equals(StatusNotification.OK)) {
+            return ResponseEntity.ok(deleteState.getValue());
+        } else if (deleteState.getStatus().equals(StatusNotification.UNAUTHORIZED)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
 
