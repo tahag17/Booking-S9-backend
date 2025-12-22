@@ -1,5 +1,6 @@
 package fr.ensaetud.Booking_back.listing.mapper;
 
+import fr.ensaetud.Booking_back.listing.application.dto.CreatedListingDTO;
 import fr.ensaetud.Booking_back.listing.application.dto.SaveListingDTO;
 import fr.ensaetud.Booking_back.listing.domain.Listing;
 import org.mapstruct.Mapper;
@@ -24,5 +25,7 @@ public interface ListingMapper {
 
     Listing saveListingDTOToListing(SaveListingDTO saveListingDTO);
 
+
+    CreatedListingDTO listingToCreatedListingDTO(Listing listing);
 
 }
