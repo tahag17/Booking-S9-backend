@@ -37,4 +37,7 @@ public interface ListingMapper {
     DisplayCardListingDTO listingToDisplayCardListingDTO(Listing listing);
 
 
+    default PriceVO mapPriceToPriceVO(int price) {
+        return new PriceVO(price);
+    }
 }
