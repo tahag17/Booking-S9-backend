@@ -1,3 +1,7 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://ep-silent-glade-agd5ehde-pooler.c-2.eu-central-1.aws.neon.tech:5432/neondb?sslmode=require&channelBinding=require
+    username: neondb_owner
+    password: npg_tasoy6vgYw1c
   liquibase:
     contexts: dev
