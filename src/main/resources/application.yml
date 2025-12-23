@@ -41,9 +41,14 @@ server:
 
 okta:
   oauth2:
-    issuer: https://dev-40qvupc4jvfi22h7.us.auth0.com/
-    client-id: ${AUTH0_CLIENT_ID:6YnaPn0SsuxhsBzvsu8G4Y2YCWrpTNgA}
-    client-secret: ${AUTH0_CLIENT_SECRET:VROAgmJObxvLrQEUV49BXpibfaeF69HM6iQyPSu_19GHLbsrJVDo9vxmlvrUb92d}
+#    issuer: https://dev-40qvupc4jvfi22h7.us.auth0.com/
+#    client-id: ${AUTH0_CLIENT_ID:6YnaPn0SsuxhsBzvsu8G4Y2YCWrpTNgA}
+#    client-secret: ${AUTH0_CLIENT_SECRET:VROAgmJObxvLrQEUV49BXpibfaeF69HM6iQyPSu_19GHLbsrJVDo9vxmlvrUb92d}
+
+    issuer:  https://dev-vfma2hn00fv8i7jg.us.auth0.com/
+    client-id: ${AUTH0_CLIENT_ID}
+    client-secret: ${AUTH0_CLIENT_SECRET}
+
 
 application:
   auth0:
