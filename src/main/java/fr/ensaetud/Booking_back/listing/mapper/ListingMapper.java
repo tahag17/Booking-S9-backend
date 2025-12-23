@@ -1,10 +1,14 @@
 package fr.ensaetud.Booking_back.listing.mapper;
 
 import fr.ensaetud.Booking_back.listing.application.dto.CreatedListingDTO;
+import fr.ensaetud.Booking_back.listing.application.dto.DisplayCardListingDTO;
 import fr.ensaetud.Booking_back.listing.application.dto.SaveListingDTO;
+import fr.ensaetud.Booking_back.listing.application.dto.vo.PriceVO;
 import fr.ensaetud.Booking_back.listing.domain.Listing;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {ListingPictureMapper.class})
 public interface ListingMapper {
@@ -22,10 +26,18 @@ public interface ListingMapper {
     @Mapping(target = "guests",source = "info.guests.value")
     @Mapping(target = "price",source = "price.value")
     @Mapping(target = "bookingCategory",source = "category")
-
     Listing saveListingDTOToListing(SaveListingDTO saveListingDTO);
-
 
     CreatedListingDTO listingToCreatedListingDTO(Listing listing);
 
+    @Mapping(target = "cover", source = "pictures")
+    List<DisplayCardListingDTO> listingToDisplayCardListingDTOs(List<Listing> listings);
+
+    @Mapping(target = "cover", source = "pictures", qualifiedByName = "extract-cover")
+    DisplayCardListingDTO listingToDisplayCardListingDTO(Listing listing);
+
+
+    default PriceVO mapPriceToPriceVO(int price) {
+        return new PriceVO(price);
+    }
 }
