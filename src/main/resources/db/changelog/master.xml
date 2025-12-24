@@ -11,7 +11,7 @@
     <property name="datetimeType" value="datetime" dbms="postgresql"/>
 
     <!-- First, create schema -->
-<!--    <include file="/db/changelog/001-schema.xml" relativeToChangelogFile="false"/>-->
+    <include file="/db/changelog/001-schema.xml" relativeToChangelogFile="false"/>
 
 
     <include file="/db/changelog/00000000000001_user.xml" relativeToChangelogFile="false"/>

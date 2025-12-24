@@ -52,4 +52,4 @@ okta:
 
 application:
   auth0:
-    role-landlord-id: rol_FBbQZsdDhRaZKRDw
+    role-landlord-id: ${AUTH0_ROLE_LANDLORD_ID}

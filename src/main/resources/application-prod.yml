@@ -15,4 +15,3 @@ spring:
         default_schema: booking
   liquibase:
     contexts: prod
-    default-schema: booking
