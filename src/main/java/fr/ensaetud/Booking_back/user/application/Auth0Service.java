@@ -1,4 +1,4 @@
-package fr.ensaetud.Booking_back.user.domain.application;
+package fr.ensaetud.Booking_back.user.application;
 
 import com.auth0.client.auth.AuthAPI;
 import com.auth0.client.mgmt.ManagementAPI;
@@ -9,7 +9,7 @@ import com.auth0.json.mgmt.users.User;
 import com.auth0.net.Response;
 import com.auth0.net.TokenRequest;
 import fr.ensaetud.Booking_back.infrastructure.config.SecurityUtils;
-import fr.ensaetud.Booking_back.user.domain.application.dto.ReadUserDTO;
+import fr.ensaetud.Booking_back.user.application.dto.ReadUserDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class Auth0Service {
     private String landlordRoleId ;
 
     private String getAccessToken() throws Auth0Exception {
-        AuthAPI authAPI = AuthAPI.newBuilder(clientId,clientSecret,domain).build();
+        AuthAPI authAPI = AuthAPI.newBuilder(domain, clientId, clientSecret).build();
         TokenRequest tokenRequest =authAPI.requestToken(domain+"/api/v2/");
         TokenHolder holder=tokenRequest.execute().getBody();
         return holder.getAccessToken();

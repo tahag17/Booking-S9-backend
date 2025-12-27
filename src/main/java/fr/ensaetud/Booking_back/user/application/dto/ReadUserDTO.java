@@ -1,4 +1,4 @@
-package fr.ensaetud.Booking_back.user.domain.application.dto;
+package fr.ensaetud.Booking_back.user.application.dto;
 
 import java.util.Set;
 import java.util.UUID;

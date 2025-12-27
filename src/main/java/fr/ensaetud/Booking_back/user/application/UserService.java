@@ -1,8 +1,8 @@
-package fr.ensaetud.Booking_back.user.domain.application;
+package fr.ensaetud.Booking_back.user.application;
 
 import fr.ensaetud.Booking_back.infrastructure.config.SecurityUtils;
 import fr.ensaetud.Booking_back.user.domain.User;
-import fr.ensaetud.Booking_back.user.domain.application.dto.ReadUserDTO;
+import fr.ensaetud.Booking_back.user.application.dto.ReadUserDTO;
 import fr.ensaetud.Booking_back.user.mapper.UserMapper;
 import fr.ensaetud.Booking_back.user.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;

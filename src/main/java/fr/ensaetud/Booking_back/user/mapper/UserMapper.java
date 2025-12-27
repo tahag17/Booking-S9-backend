@@ -2,7 +2,7 @@ package fr.ensaetud.Booking_back.user.mapper;
 
 import fr.ensaetud.Booking_back.user.domain.Authority;
 import fr.ensaetud.Booking_back.user.domain.User;
-import fr.ensaetud.Booking_back.user.domain.application.dto.ReadUserDTO;
+import fr.ensaetud.Booking_back.user.application.dto.ReadUserDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

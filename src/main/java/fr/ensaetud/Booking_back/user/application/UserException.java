@@ -1,4 +1,4 @@
-package fr.ensaetud.Booking_back.user.domain.application;
+package fr.ensaetud.Booking_back.user.application;
 
 public class UserException extends RuntimeException {
 

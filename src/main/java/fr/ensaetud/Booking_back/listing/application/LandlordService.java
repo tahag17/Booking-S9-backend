@@ -9,10 +9,9 @@ import fr.ensaetud.Booking_back.listing.domain.Listing;
 import fr.ensaetud.Booking_back.listing.mapper.ListingMapper;
 import fr.ensaetud.Booking_back.listing.repository.ListingRepository;
 import fr.ensaetud.Booking_back.sharedkernel.service.State;
-import fr.ensaetud.Booking_back.user.domain.application.Auth0Service;
-import fr.ensaetud.Booking_back.user.domain.application.UserService;
-import fr.ensaetud.Booking_back.user.domain.application.dto.ReadUserDTO;
-import org.apache.commons.collections4.Put;
+import fr.ensaetud.Booking_back.user.application.Auth0Service;
+import fr.ensaetud.Booking_back.user.application.UserService;
+import fr.ensaetud.Booking_back.user.application.dto.ReadUserDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

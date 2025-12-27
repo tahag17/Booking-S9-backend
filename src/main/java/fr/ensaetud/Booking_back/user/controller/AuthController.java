@@ -1,7 +1,7 @@
 package fr.ensaetud.Booking_back.user.controller;
 
-import fr.ensaetud.Booking_back.user.domain.application.UserService;
-import fr.ensaetud.Booking_back.user.domain.application.dto.ReadUserDTO;
+import fr.ensaetud.Booking_back.user.application.UserService;
+import fr.ensaetud.Booking_back.user.application.dto.ReadUserDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
