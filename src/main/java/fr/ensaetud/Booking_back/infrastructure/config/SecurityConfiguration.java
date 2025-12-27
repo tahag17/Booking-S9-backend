@@ -39,14 +39,16 @@ public class SecurityConfiguration {
         requestHandler.setCsrfRequestAttributeName(null);
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource));
-        http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET, "api/tenant-listing/get-all-by-category").permitAll()
-                        .requestMatchers(HttpMethod.GET, "api/tenant-listing/get-one").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/tenant-listing/search").permitAll()
-                        .requestMatchers(HttpMethod.GET, "api/booking/check-availability").permitAll()
-                        .requestMatchers(HttpMethod.GET, "assets/*").permitAll()
-                        .anyRequest()
-                        .authenticated())
+        http
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers(HttpMethod.GET, "api/tenant-listing/get-all-by-category").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "api/tenant-listing/get-one").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "api/tenant-listing/search").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "api/booking/check-availability").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "assets/*").permitAll()
+//                        .anyRequest()
+//                        .authenticated())
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(requestHandler))
                 .oauth2Login(oauth2 -> oauth2
