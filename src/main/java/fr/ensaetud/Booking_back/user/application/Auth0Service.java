@@ -36,7 +36,7 @@ public class Auth0Service {
         System.out.println("[Auth0] Domain = " + domain);
 
         AuthAPI authAPI = AuthAPI.newBuilder(domain, clientId, clientSecret).build();
-        TokenRequest tokenRequest = authAPI.requestToken(domain + "/api/v2/");
+        TokenRequest tokenRequest = authAPI.requestToken(domain + "api/v2/");
 
         TokenHolder holder = tokenRequest.execute().getBody();
 

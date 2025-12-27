@@ -28,26 +28,26 @@ public class TenantResource {
         this.tenantService = tenantService;
     }
 
-//    @GetMapping("/get-all-by-category")
-//    public ResponseEntity<Page<DisplayCardListingDTO>> findAllByBookingCategory(Pageable pageable,
-//                                                                                @RequestParam BookingCategory category) {
-//        return ResponseEntity.ok(tenantService.getAllByCategory(pageable, category));
-//    }
-//
-//    @GetMapping("/get-one")
-//    public ResponseEntity<DisplayListingDTO> getOne(@RequestParam UUID publicId) {
-//        State<DisplayListingDTO, String> displayListingState = tenantService.getOne(publicId);
-//        if (displayListingState.getStatus().equals(StatusNotification.OK)) {
-//            return ResponseEntity.ok(displayListingState.getValue());
-//        } else {
-//            ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, displayListingState.getError());
-//            return ResponseEntity.of(problemDetail).build();
-//        }
-//    }
-//
-//    @PostMapping("/search")
-//    public ResponseEntity<Page<DisplayCardListingDTO>> search(Pageable pageable,
-//                                                              @Valid @RequestBody SearchDTO searchDTO) {
-//        return ResponseEntity.ok(tenantService.search(pageable, searchDTO));
-//    }
+    @GetMapping("/get-all-by-category")
+    public ResponseEntity<Page<DisplayCardListingDTO>> findAllByBookingCategory(Pageable pageable,
+                                                                                @RequestParam BookingCategory category) {
+        return ResponseEntity.ok(tenantService.getAllByCategory(pageable, category));
+    }
+
+    @GetMapping("/get-one")
+    public ResponseEntity<DisplayListingDTO> getOne(@RequestParam UUID publicId) {
+        State<DisplayListingDTO, String> displayListingState = tenantService.getOne(publicId);
+        if (displayListingState.getStatus().equals(StatusNotification.OK)) {
+            return ResponseEntity.ok(displayListingState.getValue());
+        } else {
+            ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, displayListingState.getError());
+            return ResponseEntity.of(problemDetail).build();
+        }
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<Page<DisplayCardListingDTO>> search(Pageable pageable,
+                                                              @Valid @RequestBody SearchDTO searchDTO) {
+        return ResponseEntity.ok(tenantService.search(pageable, searchDTO));
+    }
 }

@@ -39,54 +39,54 @@ public class TenantService {
         this.userService = userService;
         this.bookingService = bookingService;
     }
-//
-//    public Page<DisplayCardListingDTO> getAllByCategory(Pageable pageable, BookingCategory category) {
-//        Page<Listing> allOrBookingCategory;
-//        if (category == BookingCategory.ALL) {
-//            allOrBookingCategory = listingRepository.findAllWithCoverOnly(pageable);
-//        } else {
-//            allOrBookingCategory = listingRepository.findAllByBookingCategoryWithCoverOnly(pageable, category);
-//        }
-//
-//        return allOrBookingCategory.map(listingMapper::listingToDisplayCardListingDTO);
-//    }
-//
-//    @Transactional(readOnly = true)
-//    public State<DisplayListingDTO, String> getOne(UUID publicId) {
-//        Optional<Listing> listingByPublicIdOpt = listingRepository.findByPublicId(publicId);
-//
-//        if (listingByPublicIdOpt.isEmpty()) {
-//            return State.<DisplayListingDTO, String>builder()
-//                    .forError(String.format("Listing doesn't exist for publicId: %s", publicId));
-//        }
-//
-//        DisplayListingDTO displayListingDTO = listingMapper.listingToDisplayListingDTO(listingByPublicIdOpt.get());
-//
-//        ReadUserDTO readUserDTO = userService.getByPublicId(listingByPublicIdOpt.get().getLandlordPublicId()).orElseThrow();
-//        LandlordListingDTO landlordListingDTO = new LandlordListingDTO(readUserDTO.firstName(), readUserDTO.imageUrl());
-//        displayListingDTO.setLandlord(landlordListingDTO);
-//
-//        return State.<DisplayListingDTO, String>builder().forSuccess(displayListingDTO);
-//    }
-//
-//
-//    @Transactional(readOnly = true)
-//    public Page<DisplayCardListingDTO> search(Pageable pageable, SearchDTO newSearch) {
-//
-//        Page<Listing> allMatchedListings = listingRepository.findAllByLocationAndBathroomsAndBedroomsAndGuestsAndBeds(pageable, newSearch.location(),
-//                newSearch.infos().baths().value(),
-//                newSearch.infos().bedrooms().value(),
-//                newSearch.infos().guests().value(),
-//                newSearch.infos().beds().value());
-//
-//        List<UUID> listingUUIDs = allMatchedListings.stream().map(Listing::getPublicId).toList();
-//
-//        List<UUID> bookingUUIDs = bookingService.getBookingMatchByListingIdsAndBookedDate(listingUUIDs, newSearch.dates());
-//
-//        List<DisplayCardListingDTO> listingsNotBooked = allMatchedListings.stream().filter(listing -> !bookingUUIDs.contains(listing.getPublicId()))
-//                .map(listingMapper::listingToDisplayCardListingDTO)
-//                .toList();
-//
-//        return new PageImpl<>(listingsNotBooked, pageable, listingsNotBooked.size());
-//    }
+
+    public Page<DisplayCardListingDTO> getAllByCategory(Pageable pageable, BookingCategory category) {
+        Page<Listing> allOrBookingCategory;
+        if (category == BookingCategory.ALL) {
+            allOrBookingCategory = listingRepository.findAllWithCoverOnly(pageable);
+        } else {
+            allOrBookingCategory = listingRepository.findAllByBookingCategoryWithCoverOnly(pageable, category);
+        }
+
+        return allOrBookingCategory.map(listingMapper::listingToDisplayCardListingDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public State<DisplayListingDTO, String> getOne(UUID publicId) {
+        Optional<Listing> listingByPublicIdOpt = listingRepository.findByPublicId(publicId);
+
+        if (listingByPublicIdOpt.isEmpty()) {
+            return State.<DisplayListingDTO, String>builder()
+                    .forError(String.format("Listing doesn't exist for publicId: %s", publicId));
+        }
+
+        DisplayListingDTO displayListingDTO = listingMapper.listingToDisplayListingDTO(listingByPublicIdOpt.get());
+
+        ReadUserDTO readUserDTO = userService.getByPublicId(listingByPublicIdOpt.get().getLandlordPublicId()).orElseThrow();
+        LandlordListingDTO landlordListingDTO = new LandlordListingDTO(readUserDTO.firstName(), readUserDTO.imageUrl());
+        displayListingDTO.setLandlord(landlordListingDTO);
+
+        return State.<DisplayListingDTO, String>builder().forSuccess(displayListingDTO);
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<DisplayCardListingDTO> search(Pageable pageable, SearchDTO newSearch) {
+
+        Page<Listing> allMatchedListings = listingRepository.findAllByLocationAndBathroomsAndBedroomsAndGuestsAndBeds(pageable, newSearch.location(),
+                newSearch.infos().baths().value(),
+                newSearch.infos().bedrooms().value(),
+                newSearch.infos().guests().value(),
+                newSearch.infos().beds().value());
+
+        List<UUID> listingUUIDs = allMatchedListings.stream().map(Listing::getPublicId).toList();
+
+        List<UUID> bookingUUIDs = bookingService.getBookingMatchByListingIdsAndBookedDate(listingUUIDs, newSearch.dates());
+
+        List<DisplayCardListingDTO> listingsNotBooked = allMatchedListings.stream().filter(listing -> !bookingUUIDs.contains(listing.getPublicId()))
+                .map(listingMapper::listingToDisplayCardListingDTO)
+                .toList();
+
+        return new PageImpl<>(listingsNotBooked, pageable, listingsNotBooked.size());
+    }
 }
