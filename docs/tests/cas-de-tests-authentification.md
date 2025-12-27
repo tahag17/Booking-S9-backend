@@ -3,19 +3,7 @@
 
 ---
 
-## 1. Objectif du document
-
-Ce document décrit les **cas de tests fonctionnels** liés au mécanisme
-d’authentification et d’autorisation de l’application.
-
-Il a pour but de permettre à un développeur ou un testeur de :
-- Comprendre le comportement attendu
-- Implémenter des tests automatisés
-- Réaliser des tests manuels de validation
-
----
-
-## 2. Périmètre de test
+## Périmètre de test
 
 Les tests couvrent :
 
@@ -28,7 +16,7 @@ Les tests couvrent :
 
 ---
 
-## 3. Environnement de test
+## Environnement de test
 
 ### Pré-requis
 
@@ -49,7 +37,7 @@ Les tests couvrent :
 
 ---
 
-## 4. Cas de tests — Authentification OAuth2
+## Cas de tests — Authentification OAuth2
 
 ---
 
@@ -216,7 +204,7 @@ synchronisation est déclenchée.
 
 ---
 
-## 6. Cas de tests — Rôles et autorisations
+## Cas de tests — Rôles et autorisations
 
 ---
 
@@ -268,7 +256,7 @@ Vérifier que les rôles sont correctement extraits depuis le token.
 
 ---
 
-## 7. Cas de tests — Déconnexion
+## Cas de tests — Déconnexion
 
 ---
 
@@ -308,6 +296,4 @@ Vérifier qu’un utilisateur déconnecté ne peut plus accéder aux endpoints p
  Non exécuté
 
 ---
-
-## Fin du document
 
