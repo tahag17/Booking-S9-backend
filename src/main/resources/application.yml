@@ -4,6 +4,8 @@ logging:
     org.hibernate.SQL: DEBUG
     fr.ensaetud.Booking_back: DEBUG
 
+
+
 spring:
   profiles:
     active: dev
@@ -51,5 +53,7 @@ okta:
 
 
 application:
+  frontend:
+    url: ${FRONTEND_URL:http://localhost:4200}
   auth0:
     role-landlord-id: ${AUTH0_ROLE_LANDLORD_ID}
