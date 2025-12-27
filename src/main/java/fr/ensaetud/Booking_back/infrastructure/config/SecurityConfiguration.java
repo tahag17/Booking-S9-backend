@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,16 +23,22 @@ public class SecurityConfiguration {
 
 
     private final OAuth2SuccessHandler successHandler;
+    private final CorsConfigurationSource corsConfigurationSource;  // Add this
 
-    public SecurityConfiguration(OAuth2SuccessHandler successHandler) {
+    public SecurityConfiguration(OAuth2SuccessHandler successHandler,
+                                 CorsConfigurationSource corsConfigurationSource) {
         this.successHandler = successHandler;
+        this.corsConfigurationSource = corsConfigurationSource;  // Add this
+
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
         requestHandler.setCsrfRequestAttributeName(null);
-        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
                 .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(requestHandler))
                 .oauth2Login(oauth2 -> oauth2
