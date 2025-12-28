@@ -15,8 +15,11 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*")); // allow all origins
-        configuration.setAllowedMethods(List.of("*")); // allow all HTTP methods
+        configuration.setAllowedOrigins(Arrays.asList(
+                "https://booking-s9-frontend.vercel.app",
+                "http://localhost:4200"
+        ));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("*")); // allow all headers
         configuration.setAllowCredentials(true); // must be false if origin is "*"
 
