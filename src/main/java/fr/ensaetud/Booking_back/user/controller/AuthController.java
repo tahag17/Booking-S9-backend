@@ -15,12 +15,12 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
@@ -37,16 +37,10 @@ public class AuthController {
         if (this.registration == null) {
             logger.error("❌ OAuth2 client registration 'okta' NOT FOUND!");
 
-            // Try to find common registration IDs
-            logger.info("Attempting to find other common registrations...");
             String[] commonIds = {"auth0", "okta", "google", "github"};
             for (String id : commonIds) {
                 ClientRegistration reg = registrationRepository.findByRegistrationId(id);
-                if (reg != null) {
-                    logger.info("✓ Found registration: {}", id);
-                } else {
-                    logger.info("✗ Not found: {}", id);
-                }
+                logger.info("{} registration found: {}", id, reg != null);
             }
 
             throw new IllegalStateException(
@@ -61,44 +55,45 @@ public class AuthController {
 
     @GetMapping("/get-authenticated-user")
     public ResponseEntity<ReadUserDTO> getAuthenticatedUser(
-            @AuthenticationPrincipal OAuth2User user, @RequestParam boolean forceResync) {
+            @AuthenticationPrincipal OAuth2User user,
+            @RequestParam boolean forceResync,
+            HttpServletRequest request
+    ) {
         logger.info("=== GET /api/auth/get-authenticated-user called ===");
         logger.info("forceResync: {}", forceResync);
         logger.info("OAuth2User is null: {}", user == null);
 
-        if(user == null) {
-            logger.warn("User is null, returning INTERNAL_SERVER_ERROR");
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
-            // Log all available attributes to see what we have
-            logger.info("User attributes: {}", user.getAttributes());
+        // Session + cookies logging
+        logger.info("Session exists: {}", request.getSession(false) != null);
+        logger.info("Session ID: {}", request.getSession(false) != null
+                ? request.getSession(false).getId()
+                : "NO SESSION");
+        logger.info("Cookies: {}", request.getCookies() != null ? Arrays.toString(request.getCookies()) : "NO COOKIES");
 
-            // Try different common email attribute names
-            Object email = user.getAttribute("email");
-            if (email == null) {
-                email = user.getAttribute("preferred_username");
-            }
-            if (email == null) {
-                email = user.getAttribute("name");
-            }
-            logger.info("User email/identifier: {}", email);
-
-            logger.info("Syncing with IDP...");
-            userService.syncWithIdp(user, forceResync);
-
-            logger.info("Getting authenticated user from security context...");
-            ReadUserDTO connectedUser = userService.getAuthenticatedUserFromSecurityContext();
-
-            logger.info("Returning user: {}", connectedUser != null ? connectedUser.email() : "null");
-            return new ResponseEntity<>(connectedUser, HttpStatus.OK);
+        if (user == null) {
+            logger.warn("User is null → returning 401 UNAUTHORIZED");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-    }
 
+        logger.info("User attributes: {}", user.getAttributes());
+        Object email = user.getAttribute("email");
+        if (email == null) email = user.getAttribute("preferred_username");
+        if (email == null) email = user.getAttribute("name");
+        logger.info("User email/identifier: {}", email);
+
+        logger.info("Syncing with IDP...");
+        userService.syncWithIdp(user, forceResync);
+
+        logger.info("Getting authenticated user from security context...");
+        ReadUserDTO connectedUser = userService.getAuthenticatedUserFromSecurityContext();
+        logger.info("Returning user: {}", connectedUser != null ? connectedUser.email() : "null");
+
+        return new ResponseEntity<>(connectedUser, HttpStatus.OK);
+    }
 
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(HttpServletRequest request) {
         logger.info("=== POST /api/auth/logout called ===");
-
         try {
             String issuerUri = registration.getProviderDetails().getIssuerUri();
             logger.info("Issuer URI: {}", issuerUri);
@@ -120,5 +115,3 @@ public class AuthController {
         }
     }
 }
-
-
