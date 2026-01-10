@@ -126,4 +126,7 @@ public class Auth0Service {
             System.out.println("[Auth0] User already has LANDLORD role");
         }
     }
+
+
+
 }

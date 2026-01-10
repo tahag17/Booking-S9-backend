@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -81,5 +82,6 @@ public class UserService {
         Optional<User> oneByPublicId = userRepository.findOneByPublicId(publicId);
         return oneByPublicId.map(userMapper::readUserDTOToUser);
     }
+    
 
 }
