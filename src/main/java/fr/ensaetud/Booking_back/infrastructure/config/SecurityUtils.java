@@ -2,10 +2,13 @@ package fr.ensaetud.Booking_back.infrastructure.config;
 
 import fr.ensaetud.Booking_back.user.domain.Authority;
 import fr.ensaetud.Booking_back.user.domain.User;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 import java.util.*;
@@ -112,6 +115,15 @@ public class SecurityUtils {
                 instanceof JwtAuthenticationToken jwtAuthenticationToken ?
                 extractAuthorityFromClaims(jwtAuthenticationToken.getToken().getClaims()) : authentication.getAuthorities();
         return authorities.stream().map(GrantedAuthority::getAuthority);
+    }
+
+    public static SecurityContext buildSecurityContext(OAuth2User user) {
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        UsernamePasswordAuthenticationToken auth =
+                new UsernamePasswordAuthenticationToken(user, null,
+                        extractAuthorityFromClaims(user.getAttributes()));
+        context.setAuthentication(auth);
+        return context;
     }
 
 

@@ -1,5 +1,7 @@
 package fr.ensaetud.Booking_back.user.controller;
 
+import fr.ensaetud.Booking_back.infrastructure.config.SecurityUtils;
+import fr.ensaetud.Booking_back.infrastructure.config.TokenValidator;
 import fr.ensaetud.Booking_back.user.application.UserService;
 import fr.ensaetud.Booking_back.user.application.dto.ReadUserDTO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,10 +28,13 @@ public class AuthController {
 
     private final UserService userService;
     private final ClientRegistration registration;
+    private final TokenValidator tokenValidator;
 
-    public AuthController(UserService userService, ClientRegistrationRepository registrationRepository) {
+    public AuthController(UserService userService, ClientRegistrationRepository registrationRepository, TokenValidator tokenValidator) {
         logger.info("=== AuthController Constructor Called ===");
         this.userService = userService;
+        this.tokenValidator = tokenValidator;
+
 
         logger.info("Looking for OAuth2 client registration with ID: 'okta'");
         this.registration = registrationRepository.findByRegistrationId("okta");
@@ -114,4 +119,22 @@ public class AuthController {
             throw e;
         }
     }
+
+    @PostMapping("/mobile-login")
+    public ResponseEntity<Void> mobileLogin(@RequestBody Map<String, String> body,
+                                            HttpServletRequest request) {
+        String token = body.get("accessToken");
+        if (token == null) return ResponseEntity.badRequest().build();
+
+        OAuth2User user = tokenValidator.validateAndGetUser(token);
+        if (user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        // Create Spring Security session
+        request.getSession(true).setAttribute("SPRING_SECURITY_CONTEXT",
+                SecurityUtils.buildSecurityContext(user));
+
+        return ResponseEntity.ok().build();
+    }
+
+
 }
