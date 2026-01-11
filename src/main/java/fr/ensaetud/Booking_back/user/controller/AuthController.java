@@ -136,5 +136,10 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/oauth2/authorization/okta")
+    public void debugLogin(HttpServletRequest request) {
+        System.out.println("DEBUG: /oauth2/authorization/okta hit!");
+    }
+
 
 }
