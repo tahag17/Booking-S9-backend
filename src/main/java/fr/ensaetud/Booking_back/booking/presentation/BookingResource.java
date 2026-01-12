@@ -45,6 +45,7 @@ public class BookingResource {
 
     @GetMapping("get-booked-listing")
     public ResponseEntity<List<BookedListingDTO>> getBookedListing() {
+        System.out.println("ENTERED ENTERED GENTERED getBookedListing()");
         return ResponseEntity.ok(bookingService.getBookedListing());
     }
 

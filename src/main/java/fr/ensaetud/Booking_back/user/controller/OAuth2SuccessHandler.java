@@ -33,7 +33,14 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         log.info("➡ Authenticated principal: {}", authentication.getName());
         log.info("➡ Session ID: {}", request.getSession().getId());
 
-        response.sendRedirect(frontendUrl);
+        boolean isMobile = request.getHeader("User-Agent").contains("Android");
+        if (isMobile) {
+            // Instead of redirecting, return JSON with token
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\": \"Login successful\"}");
+        } else {
+            response.sendRedirect(frontendUrl);
+        }
     }
 
 }

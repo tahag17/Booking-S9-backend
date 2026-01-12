@@ -120,26 +120,22 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/mobile-login")
-    public ResponseEntity<Void> mobileLogin(@RequestBody Map<String, String> body,
-                                            HttpServletRequest request) {
-        String token = body.get("accessToken");
-        if (token == null) return ResponseEntity.badRequest().build();
+//    @PostMapping("/mobile-login")
+//    public ResponseEntity<Void> mobileLogin(@RequestBody Map<String, String> body,
+//                                            HttpServletRequest request) {
+//        String token = body.get("accessToken");
+//        if (token == null) return ResponseEntity.badRequest().build();
+//
+//        OAuth2User user = tokenValidator.validateAndGetUser(token);
+//        if (user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//
+//        // Create Spring Security session
+//        request.getSession(true).setAttribute("SPRING_SECURITY_CONTEXT",
+//                SecurityUtils.buildSecurityContext(user));
+//
+//        return ResponseEntity.ok().build();
+//    }
 
-        OAuth2User user = tokenValidator.validateAndGetUser(token);
-        if (user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-        // Create Spring Security session
-        request.getSession(true).setAttribute("SPRING_SECURITY_CONTEXT",
-                SecurityUtils.buildSecurityContext(user));
-
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/oauth2/authorization/okta")
-    public void debugLogin(HttpServletRequest request) {
-        System.out.println("DEBUG: /oauth2/authorization/okta hit!");
-    }
 
 
 }
