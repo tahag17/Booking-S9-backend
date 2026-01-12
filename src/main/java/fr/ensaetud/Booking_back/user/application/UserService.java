@@ -5,8 +5,10 @@ import fr.ensaetud.Booking_back.user.domain.User;
 import fr.ensaetud.Booking_back.user.application.dto.ReadUserDTO;
 import fr.ensaetud.Booking_back.user.mapper.UserMapper;
 import fr.ensaetud.Booking_back.user.repository.UserRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +33,25 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public ReadUserDTO getAuthenticatedUserFromSecurityContext() {
-        OAuth2User principal = (OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = SecurityUtils.mapOauth2AttributesToUser(principal.getAttributes());
-        return getByEmail(user.getEmail()).orElseThrow();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = auth.getPrincipal();
+        User user;
+
+        if (principal instanceof OAuth2User oauth2User) {
+            // Case: OAuth2 login (like with a client)
+            user = SecurityUtils.mapOauth2AttributesToUser(oauth2User.getAttributes());
+        } else if (principal instanceof Jwt jwt) {
+            // Case: JWT resource server
+            Map<String, Object> claims = jwt.getClaims();
+            user = SecurityUtils.mapOauth2AttributesToUser(claims); // Reuse the same mapper
+        } else {
+            throw new RuntimeException("Unsupported principal type: " + principal.getClass());
+        }
+
+        return getByEmail(user.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found for email: " + user.getEmail()));
     }
+
 
     @Transactional(readOnly = true)
     public Optional<ReadUserDTO> getByEmail(String email) {
