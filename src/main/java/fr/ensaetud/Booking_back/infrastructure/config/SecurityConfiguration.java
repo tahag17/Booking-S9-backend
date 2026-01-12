@@ -105,17 +105,28 @@ public class SecurityConfiguration {
         };
     }
 
-        @Bean
-        public NimbusJwtDecoder jwtDecoder() {
-            NimbusJwtDecoder decoder = NimbusJwtDecoder.withJwkSetUri("https://dev-vfma2hn00fv8i7jg.us.auth0.com/.well-known/jwks.json").build();
+    @Bean
+    public NimbusJwtDecoder jwtDecoder() {
+        NimbusJwtDecoder decoder = NimbusJwtDecoder
+                .withJwkSetUri("https://dev-k26quqx50xvr3vpw.us.auth0.com/.well-known/jwks.json")
+                .build();
 
-            decoder.setJwtValidator(jwt -> {
-                System.out.println("DEBUG: JWT received: " + jwt.getTokenValue());
-                System.out.println("DEBUG: JWT claims: " + jwt.getClaims());
-                return OAuth2TokenValidatorResult.success();
-            });
+        decoder.setJwtValidator(jwt -> {
+            System.out.println("DEBUG: JWT received: " + jwt.getTokenValue());
+            System.out.println("DEBUG: JWT claims: " + jwt.getClaims());
 
-            return decoder;
-        }
+            String expectedAudience = "RORXrikrCziAlYH05gERAm1hxxZRaXIg";
+            if (!jwt.getAudience().contains(expectedAudience)) {
+                return OAuth2TokenValidatorResult.failure(
+                        new org.springframework.security.oauth2.core.OAuth2Error("invalid_token",
+                                "The required audience is missing", null));
+            }
+
+            return OAuth2TokenValidatorResult.success();
+        });
+
+        return decoder;
+    }
+
 
 }
