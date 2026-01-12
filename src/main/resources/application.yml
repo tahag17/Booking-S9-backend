@@ -48,6 +48,8 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://dev-k26quqx50xvr3vpw.us.auth0.com/
+          audiences:
+            -RORXrikrCziAlYH05gERAm1hxxZRaXIg
 
 
 server:
