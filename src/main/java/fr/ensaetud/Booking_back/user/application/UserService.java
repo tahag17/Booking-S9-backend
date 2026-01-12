@@ -31,6 +31,28 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
+//    @Transactional(readOnly = true)
+//    public ReadUserDTO getAuthenticatedUserFromSecurityContext() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        Object principal = auth.getPrincipal();
+//        User user;
+//
+//        if (principal instanceof OAuth2User oauth2User) {
+//            // Case: OAuth2 login (like with a client)
+//            user = SecurityUtils.mapOauth2AttributesToUser(oauth2User.getAttributes());
+//        } else if (principal instanceof Jwt jwt) {
+//            // Case: JWT resource server
+//            Map<String, Object> claims = jwt.getClaims();
+//            String email = (String) claims.get("https://www.ensas9.fr/email");
+//            user = getByEmail(email).orElseThrow(() -> new RuntimeException("User not found for email: " + email));
+//        } else {
+//            throw new RuntimeException("Unsupported principal type: " + principal.getClass());
+//        }
+//
+//        return getByEmail(user.getEmail())
+//                .orElseThrow(() -> new RuntimeException("User not found for email: " + user.getEmail()));
+//    }
+
     @Transactional(readOnly = true)
     public ReadUserDTO getAuthenticatedUserFromSecurityContext() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -38,18 +60,15 @@ public class UserService {
         User user;
 
         if (principal instanceof OAuth2User oauth2User) {
-            // Case: OAuth2 login (like with a client)
             user = SecurityUtils.mapOauth2AttributesToUser(oauth2User.getAttributes());
         } else if (principal instanceof Jwt jwt) {
-            // Case: JWT resource server
-            Map<String, Object> claims = jwt.getClaims();
-            user = SecurityUtils.mapOauth2AttributesToUser(claims); // Reuse the same mapper
+            user = SecurityUtils.mapJwtClaimsToUser(jwt.getClaims());
         } else {
             throw new RuntimeException("Unsupported principal type: " + principal.getClass());
         }
 
-        return getByEmail(user.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found for email: " + user.getEmail()));
+        // Return DTO from user object
+        return userMapper.readUserDTOToUser(user);
     }
 
 

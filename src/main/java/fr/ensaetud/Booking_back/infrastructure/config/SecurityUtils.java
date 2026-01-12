@@ -76,6 +76,46 @@ public class SecurityUtils {
         return user;
     }
 
+    public static User mapJwtClaimsToUser(Map<String, Object> claims) {
+        User user = new User();
+
+        // Email from the custom claim we added in Auth0
+        if (claims.get("https://www.ensas9.fr/email") != null) {
+            user.setEmail((String) claims.get("https://www.ensas9.fr/email"));
+        } else if (claims.get("email") != null) {
+            user.setEmail((String) claims.get("email"));
+        }
+
+        // First/Last name
+        if (claims.get("given_name") != null) {
+            user.setFirstName(((String) claims.get("given_name")).toLowerCase());
+        }
+
+        if (claims.get("family_name") != null) {
+            user.setLastName(((String) claims.get("family_name")).toLowerCase());
+        }
+
+        // Picture
+        if (claims.get("picture") != null) {
+            user.setImageUrl((String) claims.get("picture"));
+        }
+
+        // Roles
+        if (claims.get(SecurityUtils.CLAIMS_NAMESPACE) != null) {
+            List<String> authoritiesRaw = (List<String>) claims.get(SecurityUtils.CLAIMS_NAMESPACE);
+            Set<Authority> authorities = authoritiesRaw.stream()
+                    .map(role -> {
+                        Authority authorityObj = new Authority();
+                        authorityObj.setName(role);
+                        return authorityObj;
+                    }).collect(Collectors.toSet());
+            user.setAuthorities(authorities);
+        }
+
+        return user;
+    }
+
+
     public static List<SimpleGrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
 
         log.info("===== JWT CLAIMS =====");
