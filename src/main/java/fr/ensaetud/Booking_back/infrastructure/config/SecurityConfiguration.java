@@ -55,10 +55,10 @@ public class SecurityConfiguration {
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(successHandler))
                 //changed for mobile version
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                )
-//                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+//                .oauth2ResourceServer(oauth2 -> oauth2
+//                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+//                )
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .oauth2Client(Customizer.withDefaults())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
