@@ -49,12 +49,12 @@ server:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://dev-k26quqx50xvr3vpw.us.auth0.com/
+          issuer-uri: https://dev-k26quqx50xvr3vpw.us.auth0.com/ #the mobile native application in auth0
 
 
 okta:
   oauth2:
-    issuer:  ${AUTH0_DOMAIN} #this the browser one in env variables
+    issuer:  ${AUTH0_DOMAIN} #this the browser application in auth0
     client-id: ${AUTH0_CLIENT_ID}
     client-secret: ${AUTH0_CLIENT_SECRET}
 

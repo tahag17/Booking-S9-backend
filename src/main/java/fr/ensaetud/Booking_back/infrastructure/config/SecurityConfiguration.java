@@ -5,14 +5,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.oauth2.core.OAuth2TokenValidatorResult;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
@@ -79,4 +80,18 @@ public class SecurityConfiguration {
             return grantedAuthorities;
         };
     }
+
+        @Bean
+        public NimbusJwtDecoder jwtDecoder() {
+            NimbusJwtDecoder decoder = NimbusJwtDecoder.withJwkSetUri("https://dev-vfma2hn00fv8i7jg.us.auth0.com/.well-known/jwks.json").build();
+
+            decoder.setJwtValidator(jwt -> {
+                System.out.println("DEBUG: JWT received: " + jwt.getTokenValue());
+                System.out.println("DEBUG: JWT claims: " + jwt.getClaims());
+                return OAuth2TokenValidatorResult.success();
+            });
+
+            return decoder;
+        }
+
 }
