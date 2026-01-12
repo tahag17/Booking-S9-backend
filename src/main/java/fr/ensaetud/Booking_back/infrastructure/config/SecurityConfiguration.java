@@ -4,6 +4,7 @@ import fr.ensaetud.Booking_back.user.controller.OAuth2SuccessHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -106,6 +107,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    @Primary
     public NimbusJwtDecoder jwtDecoder() {
         NimbusJwtDecoder decoder = NimbusJwtDecoder
                 .withJwkSetUri("https://dev-k26quqx50xvr3vpw.us.auth0.com/.well-known/jwks.json")
