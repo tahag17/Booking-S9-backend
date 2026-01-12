@@ -117,7 +117,8 @@ public class SecurityConfiguration {
             System.out.println("DEBUG: JWT received: " + jwt.getTokenValue());
             System.out.println("DEBUG: JWT claims: " + jwt.getClaims());
 
-            String expectedAudience = "RORXrikrCziAlYH05gERAm1hxxZRaXIg";
+            // ✅ Expect the API identifier, not the client ID
+            String expectedAudience = "https://booking-backend-295607ecab74.herokuapp.com/";
             if (!jwt.getAudience().contains(expectedAudience)) {
                 return OAuth2TokenValidatorResult.failure(
                         new org.springframework.security.oauth2.core.OAuth2Error("invalid_token",
@@ -126,6 +127,7 @@ public class SecurityConfiguration {
 
             return OAuth2TokenValidatorResult.success();
         });
+
 
         return decoder;
     }
