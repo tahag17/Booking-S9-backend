@@ -69,7 +69,7 @@ public class SecurityConfiguration {
     }
 
     //added solely for mobile
-    @Bean
+//    @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
 
