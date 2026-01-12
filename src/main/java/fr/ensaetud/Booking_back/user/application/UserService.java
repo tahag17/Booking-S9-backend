@@ -53,21 +53,50 @@ public class UserService {
 //                .orElseThrow(() -> new RuntimeException("User not found for email: " + user.getEmail()));
 //    }
 
+//    @Transactional(readOnly = true)
+//    public ReadUserDTO getAuthenticatedUserFromSecurityContext() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        Object principal = auth.getPrincipal();
+//        User user;
+//
+//        if (principal instanceof OAuth2User oauth2User) {
+//            user = SecurityUtils.mapOauth2AttributesToUser(oauth2User.getAttributes());
+//        } else if (principal instanceof Jwt jwt) {
+//            user = SecurityUtils.mapJwtClaimsToUser(jwt.getClaims());
+//        } else {
+//            throw new RuntimeException("Unsupported principal type: " + principal.getClass());
+//        }
+//
+//        // Return DTO from user object
+//        return userMapper.readUserDTOToUser(user);
+//    }
+
     @Transactional(readOnly = true)
     public ReadUserDTO getAuthenticatedUserFromSecurityContext() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object principal = auth.getPrincipal();
-        User user;
 
+        // Determine email depending on principal type
+        final String email;
         if (principal instanceof OAuth2User oauth2User) {
-            user = SecurityUtils.mapOauth2AttributesToUser(oauth2User.getAttributes());
+            email = (String) oauth2User.getAttributes().get("email");
+            if (email == null) {
+                throw new RuntimeException("OAuth2User has no email attribute");
+            }
         } else if (principal instanceof Jwt jwt) {
-            user = SecurityUtils.mapJwtClaimsToUser(jwt.getClaims());
+            email = (String) jwt.getClaims().get("https://www.ensas9.fr/email");
+            if (email == null) {
+                throw new RuntimeException("JWT has no email claim");
+            }
         } else {
             throw new RuntimeException("Unsupported principal type: " + principal.getClass());
         }
 
-        // Return DTO from user object
+        // Fetch the user from the database (assumes user already exists)
+        User user = userRepository.findOneByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found for email: " + email));
+
+        // Map user entity to DTO
         return userMapper.readUserDTOToUser(user);
     }
 
