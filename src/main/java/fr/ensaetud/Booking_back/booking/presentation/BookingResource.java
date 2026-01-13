@@ -63,7 +63,7 @@ public class BookingResource {
     }
 
     @GetMapping("get-booked-listing-for-landlord")
-    @PreAuthorize("hasAnyRole('" + SecurityUtils.ROLE_LANDLORD + "')")
+//    @PreAuthorize("hasAnyRole('" + SecurityUtils.ROLE_LANDLORD + "')")
     public ResponseEntity<List<BookedListingDTO>> getBookedListingForLandlord() {
         return ResponseEntity.ok(bookingService.getBookedListingForLandlord());
     }
