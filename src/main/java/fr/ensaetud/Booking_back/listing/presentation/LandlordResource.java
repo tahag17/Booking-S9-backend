@@ -89,7 +89,7 @@ public class LandlordResource {
     }
 
     @GetMapping(value = "/get-all")
-    @PreAuthorize("hasAnyRole('" + SecurityUtils.ROLE_LANDLORD + "')")
+//    @PreAuthorize("hasAnyRole('" + SecurityUtils.ROLE_LANDLORD + "')")
     public ResponseEntity<List<DisplayCardListingDTO>> getAll() {
         ReadUserDTO connectedUser = userService.getAuthenticatedUserFromSecurityContext();
         List<DisplayCardListingDTO> allProperties = landlordService.getAllProperties(connectedUser);
