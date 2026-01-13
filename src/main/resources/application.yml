@@ -65,6 +65,8 @@ okta:
     client-secret: ${AUTH0_CLIENT_SECRET}
 
 
+
+
 application:
   frontend:
     url: ${FRONTEND_URL:http://localhost:4200}
