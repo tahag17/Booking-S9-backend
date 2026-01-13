@@ -1,7 +1,6 @@
 
 package fr.ensaetud.Booking_back.listing.application;
 
-import com.auth0.exception.Auth0Exception;
 import fr.ensaetud.Booking_back.listing.application.dto.CreatedListingDTO;
 import fr.ensaetud.Booking_back.listing.application.dto.DisplayCardListingDTO;
 import fr.ensaetud.Booking_back.listing.application.dto.ListingCreateBookingDTO;
@@ -48,7 +47,12 @@ public class LandlordService {
 
         pictureService.saveAll(saveListingDTO.getPictures(), savedListing);
 
-        auth0Service.addLandlordRoleToUser(userConnected);
+        try {
+            auth0Service.addLandlordRoleToUser(userConnected);
+        } catch (RuntimeException ignored) {
+
+        }
+
 
         return listingMapper.listingToCreatedListingDTO(savedListing);
     }
