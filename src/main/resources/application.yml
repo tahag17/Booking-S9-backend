@@ -41,15 +41,23 @@ spring:
 server:
   port: 8080
 
+#okta:
+#  oauth2:
+#    issuer:  ${AUTH0_DOMAIN}
+#    client-id: ${AUTH0_CLIENT_ID}
+#    client-secret: ${AUTH0_CLIENT_SECRET}
+
 okta:
   oauth2:
-    issuer:  ${AUTH0_DOMAIN}
-    client-id: ${AUTH0_CLIENT_ID}
-    client-secret: ${AUTH0_CLIENT_SECRET}
+    issuer:  ${AUTH0_DOMAIN:https://dev-40qvupc4jvfi22h7.us.auth0.com/}
+    client-id: ${AUTH0_CLIENT_ID:6YnaPn0SsuxhsBzvsu8G4Y2YCWrpTNgA}
+    client-secret: ${AUTH0_CLIENT_SECRET:VROAgmJObxvLrQEUV49BXpibfaeF69HM6iQyPSu_19GHLbsrJVDo9vxmlvrUb92d}
 
 
 application:
   frontend:
     url: ${FRONTEND_URL:http://localhost:4200}
+#  auth0:
+#    role-landlord-id: ${AUTH0_ROLE_LANDLORD_ID}
   auth0:
-    role-landlord-id: ${AUTH0_ROLE_LANDLORD_ID}
+    role-landlord-id: ${AUTH0_ROLE_LANDLORD_ID:rol_FBbQZsdDhRaZKRDw}
